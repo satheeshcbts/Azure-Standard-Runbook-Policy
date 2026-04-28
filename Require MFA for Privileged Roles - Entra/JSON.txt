@@ -1,0 +1,37 @@
+{
+  "displayName": "CA-Require-MFA-Privileged-Roles",
+  "state": "enabledForReportingButNotEnforced",
+  "conditions": {
+    "users": {
+      "includeRoles": [
+        "62e90394-69f5-4237-9190-012177145e10", 
+        "e8611ab8-c189-46e8-94e1-60213ab1f814",
+        "194ae4cb-b126-40b2-bd5b-6091b380977d",
+        "b1be1c3e-b65d-4f19-8427-f6fa0d97feb9",
+        "c4e39bd9-1100-46d3-8c65-fb160da0071f"
+      ],
+      "includeGroups": [
+        "<AZ-Subscription-Owners-Group-ID>"
+      ],
+      "excludeUsers": [
+        "<BreakGlass-Account-Object-ID>"
+      ]
+    },
+    "applications": {
+      "includeApplications": [
+        "All"
+      ]
+    },
+    "clientAppTypes": [
+      "browser",
+      "mobileAppsAndDesktopClients"
+    ]
+  },
+  "grantControls": {
+    "operator": "OR",
+    "builtInControls": [
+      "mfa"
+    ]
+  },
+  "sessionControls": {}
+}
