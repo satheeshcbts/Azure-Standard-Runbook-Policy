@@ -1,0 +1,78 @@
+Steps (Portal): Restrict Guest Invitations
+==========================================
+Go to Microsoft Entra Admin Center
+Navigate to:
+External Identities → External collaboration settings
+
+Configure:
+
+Guest invite settings → Only users assigned specific admin roles can invite guests
+
+Allow only:
+
+Global Administrator
+User Administrator
+Privileged Role Administrator
+
+
+Steps (Portal): Enforce Access Reviews for B2B Users
+====================================================
+Go to: Identity Governance → Access Reviews
+
+Create New access review
+Scope: Users → Guest users
+
+Reviewers: Self or resource owners
+
+Configuration:
+
+Recurrence: Quarterly / Monthly
+Auto‑apply results: Enabled
+If no response: Remove access
+Require justification: Optional
+
+
+Steps (Portal): Use Access Packages with Expiration
+===================================================
+
+Go to: Identity Governance → Entitlement Management → Access Packages
+
+Create Access Package: Add Groups / Apps / SharePoint / Teams
+
+Lifecycle:
+
+Access expiration (e.g., 30 / 60 / 90 days)
+Require approval
+Automatically remove access on expiry
+
+
+Optional: Automatic Cleanup of Inactive Guests
+==============================================
+Go to: Identity Governance → Lifecycle Workflows
+
+Use built‑in template: Remove inactive guest users
+
+Configure:
+
+Condition: No sign‑in for 30–90 days
+Action: Disable or delete user
+
+
+Go to https://aka.ms/ge
+
+Sign in with admin account
+Set API version to v1.0
+Click Modify permissions
+Add and Consent to: Policy.ReadWrite.ConditionalAccess
+
+Deploy via Graph
+
+--> There is no JSON / Graph / Azure Policy that configures guest invitation restrictions.
+--> For Access Reviews:
+    POST https://graph.microsoft.com/v1.0/identity/conditionalAccess/policies
+    JSON
+--> For Expiring Access Packages
+    POST https://graph.microsoft.com/v1.0/identityGovernance/entitlementManagement/accessPackages
+    JSON
+--> There is no JSON / Graph / Azure Policy for Automatic Cleanup of Inactive Guests.
+
