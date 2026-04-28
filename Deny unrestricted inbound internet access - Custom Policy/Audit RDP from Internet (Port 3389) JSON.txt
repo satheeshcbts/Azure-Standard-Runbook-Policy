@@ -1,0 +1,51 @@
+{
+  "displayName": "Audit NSG rules allowing inbound RDP from Internet",
+  "policyType": "Custom",
+  "mode": "Indexed",
+  "description": "Audits NSG rules that allow inbound RDP (port 3389) from the Internet.",
+  "policyRule": {
+    "if": {
+      "allOf": [
+        {
+          "field": "type",
+          "equals": "Microsoft.Network/networkSecurityGroups/securityRules"
+        },
+        {
+          "field": "Microsoft.Network/networkSecurityGroups/securityRules/direction",
+          "equals": "Inbound"
+        },
+        {
+          "field": "Microsoft.Network/networkSecurityGroups/securityRules/access",
+          "equals": "Allow"
+        },
+        {
+          "anyOf": [
+            {
+              "field": "Microsoft.Network/networkSecurityGroups/securityRules/sourceAddressPrefix",
+              "in": ["*", "0.0.0.0/0", "::/0"]
+            },
+            {
+              "field": "Microsoft.Network/networkSecurityGroups/securityRules/sourceAddressPrefixes[*]",
+              "contains": "0.0.0.0/0"
+            }
+          ]
+        },
+        {
+          "anyOf": [
+            {
+              "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRange",
+              "equals": "3389"
+            },
+            {
+              "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRanges[*]",
+              "equals": "3389"
+            }
+          ]
+        }
+      ]
+    },
+    "then": {
+      "effect": "audit"
+    }
+  }
+}

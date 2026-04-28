@@ -1,0 +1,51 @@
+{
+  "displayName": "Deny NSG rules allowing inbound Any:Any from Internet",
+  "policyType": "Custom",
+  "mode": "Indexed",
+  "description": "Denies NSG security rules that allow unrestricted inbound access from the Internet.",
+  "policyRule": {
+    "if": {
+      "allOf": [
+        {
+          "field": "type",
+          "equals": "Microsoft.Network/networkSecurityGroups/securityRules"
+        },
+        {
+          "field": "Microsoft.Network/networkSecurityGroups/securityRules/direction",
+          "equals": "Inbound"
+        },
+        {
+          "field": "Microsoft.Network/networkSecurityGroups/securityRules/access",
+          "equals": "Allow"
+        },
+        {
+          "anyOf": [
+            {
+              "field": "Microsoft.Network/networkSecurityGroups/securityRules/sourceAddressPrefix",
+              "in": ["*", "0.0.0.0/0", "::/0"]
+            },
+            {
+              "field": "Microsoft.Network/networkSecurityGroups/securityRules/sourceAddressPrefixes[*]",
+              "contains": "0.0.0.0/0"
+            }
+          ]
+        },
+        {
+          "anyOf": [
+            {
+              "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRange",
+              "equals": "*"
+            },
+            {
+              "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRanges[*]",
+              "equals": "*"
+            }
+          ]
+        }
+      ]
+    },
+    "then": {
+      "effect": "deny"
+    }
+  }
+}
