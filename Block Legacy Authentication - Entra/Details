@@ -1,0 +1,97 @@
+Security Requirement: Block all legacy authentication attempts tenant‑wide, without exception — except for emergency break‑glass accounts.
+
+
+What Conditional Access CAN do: Block legacy authentication client types, Apply tenant‑wide, Exclude specific users (break‑glass), Apply to all cloud apps
+
+What it CANNOT do: It does not impact service principals, It does not block modern OAuth with MFA, It should not be scoped per‑app (legacy auth is global)
+
+Step‑by‑Step Implementation
+Create break‑glass accounts
+
+Minimum: 1
+Recommended: 2
+
+
+Deploy policy in Report‑Only via Graph
+Go to https://aka.ms/ge
+
+Sign in with admin account
+Set API version to v1.0
+Click Modify permissions
+Add and Consent to: Policy.ReadWrite.ConditionalAccess
+
+1. HTTP Method: POST
+2. Endpoint: https://graph.microsoft.com/v1.0/identity/conditionalAccess/policies
+3. JSON
+
+Create policy using JSON
+Set state:
+JSON "state": "enabledForReportingButNotEnforced"
+
+Step 3 – Validate in Sign‑in Logs
+Microsoft Entra ID
+→ Sign‑in logs
+→ Conditional Access tab
+→ Report‑only
+
+Confirm:
+Legacy auth attempts → Blocked (Report‑only)
+Modern auth → Allowed
+
+Step 4 – Remediate legacy usage
+Before enforcing, identify and fix:
+
+Old mail clients
+Network devices using SMTP AUTH
+Scripts using basic auth
+
+
+Step 5 – Enforce policy
+Update:
+JSON "state": "enabled" 
+
+Legacy auth is now fully blocked tenant‑wide.
+
+
+Explanation of Key JSON Fields
+clientAppTypes
+"exchangeActiveSync" → legacy EAS
+"other" → all remaining legacy protocols (POP, IMAP, SMTP AUTH, older Office)
+
+These two values together fully cover legacy authentication.
+includeApplications: ["All"]
+Required — legacy auth isn’t app‑specific
+Never select individual apps
+
+excludeUsers
+Only break‑glass human user accounts
+Never exclude groups
+Never exclude “All admins”
+
+state
+enabledForReportingButNotEnforced → report‑only
+Change to enabled after validation
+
+
+
+Via Portal:
+===========
+
+Path:
+Microsoft Entra Admin Center
+→ Protection
+→ Conditional Access
+→ New policy
+
+Portal settings
+
+Users: All users
+Applications: All cloud apps
+Conditions → Client apps:
+
+Exchange ActiveSync
+Other legacy clients
+
+
+Grant: Block access
+Exclude break‑glass accounts
