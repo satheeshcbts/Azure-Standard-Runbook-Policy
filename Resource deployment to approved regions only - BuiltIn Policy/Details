@@ -1,0 +1,50 @@
+Built‑in Azure Policy (recommended)
+Policy name: Allowed locations
+Policy ID: e56962a6-4747-49cd-b67b-bf8b01975c4c
+
+Category: Governance
+Effect: Deny (recommended)
+Audit (visibility only)
+
+What it does
+
+Blocks resource deployments if location is not in the approved list
+Evaluated at create and update time
+
+This policy is Microsoft‑maintained, supported, and audit‑accepted
+
+How to configure it (Azure Portal)
+Step 1: Open Azure Policy
+
+Azure Portal → Policy
+Go to Definitions
+Search for Allowed locations
+
+Step 2: Assign the policy
+
+Click Allowed locations
+Select Assign
+Scope: Management Group (best practice) or Subscription
+
+Step 3: Configure allowed regions
+In Parameters → Allowed locations, enter approved regions:
+Example:
+[  "eastus",  "westeurope",  "centralindia"]
+
+Use Azure region names, not display names
+
+Examples:
+
+✅ centralindia
+❌ Central India
+
+
+Step 4: Set enforcement
+
+Effect → Deny
+Assign the policy
+
+From this point onward:
+
+Deployments outside these regions are blocked
+Existing resources unaffected (unless updated)
