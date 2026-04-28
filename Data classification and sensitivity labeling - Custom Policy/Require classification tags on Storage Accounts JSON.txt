@@ -1,0 +1,32 @@
+{
+  "displayName": "Require data classification tags on Storage Accounts",
+  "policyType": "Custom",
+  "mode": "Indexed",
+  "description": "Requires storage accounts containing regulated data to be tagged with data sensitivity and data type for Purview-based governance.",
+  "parameters": {},
+  "policyRule": {
+    "if": {
+      "allOf": [
+        {
+          "field": "type",
+          "equals": "Microsoft.Storage/storageAccounts"
+        },
+        {
+          "anyOf": [
+            {
+              "field": "tags['DataSensitivity']",
+              "exists": false
+            },
+            {
+              "field": "tags['DataType']",
+              "exists": false
+            }
+          ]
+        }
+      ]
+    },
+    "then": {
+      "effect": "deny"
+    }
+  }
+}

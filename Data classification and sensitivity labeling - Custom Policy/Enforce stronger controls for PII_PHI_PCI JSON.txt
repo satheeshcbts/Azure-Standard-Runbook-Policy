@@ -1,0 +1,30 @@
+{
+  "displayName": "Require Private Endpoint for Storage with Sensitive Data",
+  "policyType": "Custom",
+  "mode": "Indexed",
+  "description": "Ensures storage accounts tagged as Confidential or HighlyConfidential use private endpoints.",
+  "policyRule": {
+    "if": {
+      "allOf": [
+        {
+          "field": "type",
+          "equals": "Microsoft.Storage/storageAccounts"
+        },
+        {
+          "field": "tags['DataSensitivity']",
+          "in": [
+            "Confidential",
+            "HighlyConfidential"
+          ]
+        },
+        {
+          "field": "Microsoft.Storage/storageAccounts/privateEndpointConnections[*]",
+          "exists": false
+        }
+      ]
+    },
+    "then": {
+      "effect": "deny"
+    }
+  }
+}
