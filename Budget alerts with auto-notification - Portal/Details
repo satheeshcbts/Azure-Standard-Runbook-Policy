@@ -1,0 +1,26 @@
+Azure Policy cannot create or enforce Azure Budgets.
+
+This applies to: Subscription scope, Resource Group scope and Management Group scope.
+
+Budgets are Cost Management objects, not ARM resources, and Azure Policy cannot deploy or modify them.
+
+Why Azure Policy cannot do this --> Azure Policy can only evaluate or deploy ARM‑managed resources.
+
+Azure Budgets are created and managed through Cost Management APIs, Azure Portal (Cost Management) and Automation (CLI / PowerShell / REST)
+
+Because budgets are not ARM resources, DeployIfNotExists does not work for budgets.
+
+Implement Budget alerts: Azure Portal (Most Common)
+
+Budgets with 80% / 100% / 120% thresholds can be created manually via the portal.
+
+Steps (Portal):
+
+ 1. Azure Portal → Cost Management + Billing
+ 2. Select Cost analysis
+ 3. Choose Scope: Subscription & Resource Group
+ 4. Select Budgets → Add
+ 5. Set: Reset period (Monthly / Quarterly / Annual) and Budget amount
+ 6. Configure Alerts: 80% → Actual cost alert, 100% → Actual cost alert and 120% → Forecasted or actual alert
+ 7. Add email recipients or Action Group
+ 8. Save
