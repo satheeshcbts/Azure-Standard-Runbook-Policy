@@ -1,0 +1,59 @@
+Access Reviews:
+===============
+{
+  "displayName": "Quarterly-B2B-Guest-Access-Review",
+  "descriptionForAdmins": "Quarterly access review for all guest users to prevent lingering external access.",
+  "scope": {
+    "@odata.type": "#microsoft.graph.accessReviewQueryScope",
+    "query": "/users?$filter=userType eq 'Guest'",
+    "queryType": "MicrosoftGraph"
+  },
+  "reviewers": [
+    {
+      "query": "/users?$filter=userType eq 'Member'",
+      "queryType": "MicrosoftGraph"
+    }
+  ],
+  "settings": {
+    "recurrence": {
+      "pattern": {
+        "type": "quarterly"
+      },
+      "range": {
+        "type": "noEnd"
+      }
+    },
+    "autoApplyDecisionsEnabled": true,
+    "defaultDecision": "Deny",
+    "justificationRequiredOnApproval": false,
+    "recommendationsEnabled": true,
+    "instanceDurationInDays": 14
+  }
+}
+
+
+
+Expiring Access Packages:
+=========================
+{
+  "displayName": "Project-External-Collaborators",
+  "description": "Time-bound access package for external collaborators.",
+  "accessPackageResourceRoleScopes": [],
+  "assignmentPolicies": [
+    {
+      "displayName": "Project Duration Policy",
+      "description": "External access expires automatically.",
+      "requestorSettings": {
+        "scopeType": "AllExternalUsers"
+      },
+      "expiration": {
+        "duration": "P90D"
+      },
+      "requestApprovalSettings": {
+        "isApprovalRequired": true,
+        "approvalMode": "SingleStage"
+      }
+    }
+  ]
+}
+
