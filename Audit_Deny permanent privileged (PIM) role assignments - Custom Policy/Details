@@ -1,0 +1,49 @@
+Azure Policy CANNOT directly enforce PIM (Privileged Identity Management).
+Azure Policy CAN:
+   1. Audit or deny RBAC role assignments (Owner, User Access Admin, RBAC Admin)
+   2. Prevent permanent Owner assignments
+   3. Prevent PIM circumvention (direct assignments instead of eligible)
+   4. Enforce that only approved principals can assign Owner
+
+What Azure Policy CANNOT do: Force a role to be “eligible‑only”, Require activation via PIM, Control PIM activation settings (MFA, approval, duration)
+
+PIM enforcement is done via Entra ID PIM configuration, not policy.
+Correct solution = Azure Policy + PIM working together.
+
+Real‑world architecture (recommended by Microsoft)
+Azure Policy
+  ├─ Audit/Deny Owner & privileged role assignments
+  └─ Prevent non‑PIM permanent assignments
+
+Microsoft Entra PIM
+  ├─ Roles assigned as Eligible
+  ├─ MFA required on activation
+  ├─ Time‑bound JIT access
+
+This is the industry‑standard, Microsoft‑recommended model.
+
+Step‑by‑Step – Policy to Audit or Deny Owner Role Assignments
+
+Owner Role ID:
+8e3af657-a8ff-443c-a75c-2fe8c4bcb635
+
+Start with Audit, then move to Deny.
+
+Extending the Policy – Cover all Privileged Roles
+
+Most orgs also restrict:
+
+Owner
+User Access Administrator
+RBAC Administrator
+
+Role IDs:
+Owner:                           8e3af657-a8ff-443c-a75c-2fe8c4bcb635
+User Access Administrator:       18d7d88d-d35e-4fb5-a5c3-7773c20a72d9
+RBAC Administrator:              f58310d9-a9f6-439a-9e8d-f62e7b41a168
+
+PIM Configuration (MANDATORY – Policy alone is insufficient)
+You must configure this in Microsoft Entra ID PIM:
+
+Assign roles as Eligible, not Active
+Require: MFA on activation, Justification, Time‑bound activation (1–4 hours)
