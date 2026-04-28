@@ -1,0 +1,42 @@
+Built-in policy: Configure storage accounts to disable public network access
+
+Definition ID: a06d0189-92e8-4dba-b0c4-08d7669fce7d
+Effect: Modify or Deny – sets properties.publicNetworkAccess = Disabled and disables all public endpoint traffic.
+
+Manual configuration via Portal:
+
+Storage Account → Networking (Security + networking).
+Under Public network access, select Disabled.
+Save to block all public access.
+
+
+Azure SQL Server & Databases
+Built-in policy: Configure Azure SQL Server to disable public network access
+
+Definition ID: 28b0b1e5-17ba-4963-a7a4-5a1ab4400a0b
+Effect: Modify or Deny – sets publicNetworkAccess = Disabled, blocking all public IP connectivity.
+
+Manual configuration via Portal:
+
+Navigate to SQL Server → Networking.
+Under Public access, choose Disable.
+Save — this change disables firewall-based public IP access.
+
+
+Azure Cosmos DB
+Built-in policy: Azure Cosmos DB should disable public network access
+
+Definition ID: 797b37f7-06b8-444c-b1ad-fc62867f335a
+Effect: Audit, Deny, or Modify – ensures properties.publicNetworkAccess = Disabled for all Cosmos DB accounts.
+
+
+Implementation Recommendations
+
+Recommendation:
+Assign the respective built-in policies at the management group or subscription level with effect set to Deny or Modify based on your governance model.
+
+	Modify: Automatically corrects noncompliant resources.
+	Deny: Prevents any creation or update that would enable public network access.
+
+
+Manual only: While turning off public network access manually in the portal is possible, it doesn’t prevent future misconfiguration or ensure compliance across large environments.
