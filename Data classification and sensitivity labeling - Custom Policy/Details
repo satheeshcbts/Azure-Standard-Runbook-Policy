@@ -1,0 +1,23 @@
+Azure Policy can enforce: Storage must have classification tags
+
+Sensitive data storage must: Use private endpoint, Disable public access, Enable encryption with CMK, Block replication to unapproved regions, Different controls per sensitivity level
+
+Microsoft Purview – where configuration is done (Manual, Required)
+Purview classification & labeling is configured only in Purview portal
+Steps:
+
+Open Microsoft Purview
+Register data sources (Storage, SQL, etc.)
+Run scans
+Enable:
+
+Sensitive info types (PII / PHI / PCI)
+Classification rules
+Sensitivity labels
+
+
+Configure auto‑labeling policies
+Review findings
+(Optional) Export metadata to tags via automation
+
+--> This cannot be done with Azure Policy JSON
