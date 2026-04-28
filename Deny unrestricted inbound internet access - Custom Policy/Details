@@ -1,0 +1,18 @@
+Azure does not provide built‑in policies that Explicitly audit SSH (22) from 0.0.0.0/0, Explicitly audit RDP (3389) from 0.0.0.0/0 Or *deny inbound Any:Any (0.0.0.0/0 → )
+
+Correct Implementation Approach
+
+
+Requirement			Policy Type
+Deny inbound Any:Any		Custom Policy (Deny)
+Audit SSH from Internet		Custom Policy (Audit)
+Audit RDP from Internet		Custom Policy (Audit)
+
+Implement (Portal – Step by Step)
+
+1. Azure Portal → Policy
+2. Definitions → Create
+3. Paste each custom policy JSON
+4. Save definitions
+5. Assign policies at: Management Group or Subscription
+6. Enforcement: Any:Any → Deny and SSH/RDP → Audit
