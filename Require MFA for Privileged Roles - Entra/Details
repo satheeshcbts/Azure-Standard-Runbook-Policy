@@ -1,0 +1,85 @@
+Security Requirement
+
+Any privileged identity access must require MFA, regardless of location, device, or application.
+
+Design Decisions 
+Roles included
+
+Global Administrator
+Privileged Role Administrator
+Security Administrator
+Conditional Access Administrator
+Authentication Administrator
+(These cover PIM‑eligible and active roles automatically)
+
+Subscription Owners
+Handled via group‑based assignment:
+
+Azure AD group: AZ-Subscription-Owners
+Subscription RBAC Owner assigned via group
+Group included in Conditional Access
+
+Key principles
+
+All cloud apps (not just Azure Portal)
+No trusted location exclusions
+Break‑glass accounts excluded
+Start in Report‑only, then enforce
+
+
+Before deploying either policy:
+Required Entra ID role
+You must be one of: Global Administrator, Conditional Access Administrator, Security Administrator
+Create break‑glass account
+Create AZ-Subscription-Owners group
+Add subscription owners to group
+
+
+Go to https://aka.ms/ge
+
+Sign in with admin account
+Set API version to v1.0
+Click Modify permissions
+Add and Consent to: Policy.ReadWrite.ConditionalAccess
+
+Deploy via Graph
+1. HTTP Method: POST
+2. Endpoint: https://graph.microsoft.com/v1.0/identity/conditionalAccess/policies
+3. JSON
+4. CA policy created and visible in Entra Admin Center → Conditional Access (MFA simulated (no impact yet))
+
+Validate
+
+Azure AD → Sign‑in logs
+Filter: Report‑only
+Confirm MFA would be required
+
+Finally Enforce ("state": "enabled")
+
+Recommended lifecycle (Microsoft best practice)
+
+Report‑only → 24–72 hours
+Review Sign‑in Logs → “Report‑only”
+Confirm MFA would succeed
+Switch to enabled
+In production, no legitimate admin CA policy should skip report‑only.
+
+MFA intentionally disabled for 1 Break-glass user account (Min 1 and Max 2)
+
+
+Via Portal:
+===========
+
+Path:
+Microsoft Entra Admin Center
+→ Protection
+→ Conditional Access
+→ New policy
+
+What you can do in the portal
+
+Target directory roles (Global Admin, etc.)
+Include a group for Subscription Owners
+Exclude break‑glass accounts
+Require MFA
+Set Report‑only or Enabled
