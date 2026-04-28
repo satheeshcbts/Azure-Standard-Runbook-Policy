@@ -1,0 +1,35 @@
+Microsoft provides built‑in Azure Policies specifically for this.
+Built‑in Policy (what you want)
+Name: Configure Microsoft Defender CSPM to be enabled
+Policy ID: 689f7782-ef2c-4270-a6d0-7664869076bd
+Effect: DeployIfNotExists
+What it does
+
+Automatically sets:
+Microsoft.Security/pricings
+name = "CloudPosture"
+pricingTier = "Standard"
+
+Enforces CSPM at management group or subscription scope
+Ensures future subscriptions inherit CSPM automatically
+
+How to assign the policy (recommended setup)
+Scope: Management Group (best for enterprise governance)
+
+Steps
+
+Azure Portal → Policy
+Definitions
+Search: Configure Microsoft Defender CSPM
+Assign policy
+Set effect = DeployIfNotExists
+Managed Identity = System-assigned
+Assign at MG root
+
+Required role: Owner (policy will deploy Defender pricing)
+
+Microsoft explicitly states:
+
+1. CSPM plans are subscription-level
+2. Azure Policy is supported and recommended to enforce enablement
+3. Secure Score is subscription-scoped but visible at management group
