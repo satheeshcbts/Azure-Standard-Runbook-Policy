@@ -1,0 +1,44 @@
+Azure Policy CANNOT require that a Private Endpoint already exists at creation time. Azure Policy CAN enforce “private only posture” by denying public network access
+This is by design because:
+
+ 1. Private Endpoints are separate resources
+ 2. Often created after the PaaS resource
+ 3. Require VNet/DNS approvals
+
+Correct enforcement model (Microsoft‑aligned):
+
+Deny public network access → forces all traffic to be private → Private Endpoints can still be created later via the Portal
+
+This fully satisfies: Traffic never traverses the public internet
+
+Service		Enforced Control
+Storage		Deny publicNetworkAccess = Enabled
+Key Vault	Deny public network access
+SQL Server	Deny public network access
+Web App		Deny public access
+Cosmos DB	Deny public network access
+
+After this, Private Endpoints CAN still be created via the Portal.
+
+Step‑by‑Step Implementation (Portal)
+
+1. Azure Portal → Policy
+2. Definitions → Create
+3. Paste each custom policy JSON
+4. Save policies
+
+Now we need to create the Policy Initiative
+
+1. Azure Portal → Policy
+2. Go to Definitions
+3. Click + Initiative definition
+4. Fill in --> Name: Enforce-Private-Only-PaaS, Category: Security / Networking and Definition location: Management Group (recommended)
+5. In Policies section: Click Add policy definition, Search and select each of the 5 custom policies and Add all of them to the initiative
+
+Now Assign (Enable) the Initiative
+
+Open the initiative
+Click Assign
+Choose scope: Management Group or Subscription
+Enforcement mode: Enabled
+Review + Create: Now the enforcement is active
