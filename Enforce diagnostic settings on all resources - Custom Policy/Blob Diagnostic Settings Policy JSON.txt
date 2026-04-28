@@ -1,0 +1,61 @@
+Applies to: Microsoft.Storage/storageAccounts/blobServices
+
+{
+  "displayName": "Deploy Storage Blob Diagnostic Settings to Log Analytics",
+  "policyType": "Custom",
+  "mode": "Indexed",
+  "description": "Ensures Storage Blob read, write, and delete logs are sent to Log Analytics.",
+  "parameters": {
+    "logAnalyticsWorkspaceId": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Log Analytics Workspace Resource ID"
+      }
+    }
+  },
+  "policyRule": {
+    "if": {
+      "field": "type",
+      "equals": "Microsoft.Storage/storageAccounts/blobServices"
+    },
+    "then": {
+      "effect": "DeployIfNotExists",
+      "details": {
+        "type": "Microsoft.Insights/diagnosticSettings",
+        "deploymentScope": "resource",
+        "existenceCondition": {
+          "field": "Microsoft.Insights/diagnosticSettings/workspaceId",
+          "equals": "[parameters('logAnalyticsWorkspaceId')]"
+        },
+        "roleDefinitionIds": [
+          "/providers/Microsoft.Authorization/roleDefinitions/09273fda-6e03-49d2-989c-12dccd6b4017"
+        ],
+        "deployment": {
+          "properties": {
+            "mode": "Incremental",
+            "template": {
+              "resources": [
+                {
+                  "type": "Microsoft.Insights/diagnosticSettings",
+                  "apiVersion": "2021-05-01-preview",
+                  "name": "blob-to-law",
+                  "properties": {
+                    "workspaceId": "[parameters('logAnalyticsWorkspaceId')]",
+                    "logs": [
+                      { "category": "StorageRead", "enabled": true },
+                      { "category": "StorageWrite", "enabled": true },
+                      { "category": "StorageDelete", "enabled": true }
+                    ],
+                    "metrics": [
+                      { "category": "AllMetrics", "enabled": true }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
