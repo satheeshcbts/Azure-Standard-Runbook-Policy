@@ -1,0 +1,15 @@
+{
+  "displayName": "Deny Cosmos DB Accounts with Public Network Access Enabled",
+  "policyType": "Custom",
+  "mode": "Indexed",
+  "description": "Denies Cosmos DB accounts that allow public network access.",
+  "policyRule": {
+    "if": {
+      "allOf": [
+        { "field": "type", "equals": "Microsoft.DocumentDB/databaseAccounts" },
+        { "field": "Microsoft.DocumentDB/databaseAccounts/publicNetworkAccess", "equals": "Enabled" }
+      ]
+    },
+    "then": { "effect": "deny" }
+  }
+}

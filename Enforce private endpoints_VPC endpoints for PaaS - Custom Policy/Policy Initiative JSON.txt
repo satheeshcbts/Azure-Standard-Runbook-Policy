@@ -1,0 +1,38 @@
+{
+  "properties": {
+    "displayName": "Enforce Private-Only Network Access for PaaS Services",
+    "policyType": "Custom",
+    "description": "Denies public network access for core PaaS services to enforce private-only connectivity while allowing Private Endpoints.",
+    "metadata": {
+      "category": "Network Security"
+    },
+    "policyDefinitions": [
+      {
+        "policyDefinitionId": "<STORAGE_DENY_PUBLIC_ACCESS_POLICY_ID>"
+      },
+      {
+        "policyDefinitionId": "<KEYVAULT_DENY_PUBLIC_ACCESS_POLICY_ID>"
+      },
+      {
+        "policyDefinitionId": "<SQL_DENY_PUBLIC_ACCESS_POLICY_ID>"
+      },
+      {
+        "policyDefinitionId": "<WEBAPP_DENY_PUBLIC_ACCESS_POLICY_ID>"
+      },
+      {
+        "policyDefinitionId": "<COSMOS_DENY_PUBLIC_ACCESS_POLICY_ID>"
+      }
+    ]
+  }
+}
+
+
+
+How to fill Policy Definition ID:
+
+
+"policyDefinitionId": "/providers/Microsoft.Management/managementGroups/corp-mg/providers/Microsoft.Authorization/policyDefinitions/deny-storage-public-access"
+"policyDefinitionId": "/providers/Microsoft.Management/managementGroups/corp-mg/providers/Microsoft.Authorization/policyDefinitions/deny-keyvault-public-access"
+"policyDefinitionId": "/providers/Microsoft.Management/managementGroups/corp-mg/providers/Microsoft.Authorization/policyDefinitions/deny-sql-public-access"
+"policyDefinitionId": "/providers/Microsoft.Management/managementGroups/corp-mg/providers/Microsoft.Authorization/policyDefinitions/deny-webapp-public-access"
+"policyDefinitionId": "/providers/Microsoft.Management/managementGroups/corp-mg/providers/Microsoft.Authorization/policyDefinitions/deny-cosmos-public-access"
