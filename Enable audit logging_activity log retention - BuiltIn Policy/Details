@@ -1,0 +1,57 @@
+Azure Activity Log
+   |
+   | (Policy: Configure Azure Activity logs to stream to specified Log Analytics workspace)
+   v
+Log Analytics Workspace or Storage Account
+   |
+   | (Retention configured here ← NOT via policy)
+   v
+365 days / 2 years / 12 years archive
+
+Policy: Configure Azure Activity logs to stream to specified Log Analytics workspace
+Policy ID: 2465583e-4e78-4c15-b6be-a36cbc7c8b0f
+
+What this policy DOES
+
+Creates diagnostic settings at subscription scope
+Streams Azure Activity Logs (control‑plane events) to Log Analytics workspace (LAW)
+Applies automatically using DeployIfNotExists
+
+After this policy:
+
+Logs are sent out of the Activity Log service
+Logs arrive in Log Analytics (table: AzureActivity)
+
+
+Policy: Activity log should be retained for at least one year
+Policy ID: b02aacc0-b073-424e-8298-42b22829ee0a
+
+This is an AuditIfNotExists policy. It checks whether, Activity Logs are configured to be retained for ≥ 365 days OR forever. It does not create or move logs anywhere, it's purely for Audit only.
+
+So the actual retention happens only in the destination (Log Analytics Workspace or Storage Account), where retention must be explicitly configured.  It is recommended to take LAW,
+
+Step 1: Open the Log Analytics workspace
+
+Azure Portal
+Search Log Analytics workspaces
+Select your central logging workspace
+
+Step 2: Go to Tables
+
+In the workspace menu → Tables
+Ensure Analytics tab is selected
+Search for: AzureActivity
+
+Step 3: Configure retention for AzureActivity
+
+Click AzureActivity
+Click Settings
+Set:
+
+Retention (days) → 365 (regulated)
+or 90 (non‑regulated)
+Optionally enable Archive for long‑term retention (up to 12 years)
+
+Example:
+Analytics retention: 365 days
+Archive retention: 2555 days (optional)
